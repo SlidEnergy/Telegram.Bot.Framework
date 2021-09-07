@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
 
-namespace UnitTests.NetCore.Commands
+namespace UnitTests.Commands
 {
     class MockCommand : CommandBase
     {

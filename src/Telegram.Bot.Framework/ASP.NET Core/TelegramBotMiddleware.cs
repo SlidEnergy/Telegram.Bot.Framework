@@ -1,12 +1,10 @@
-﻿#if !NETFRAMEWORK
-
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types;
 
@@ -25,6 +23,7 @@ namespace Telegram.Bot.Framework
         /// Initializes an instance of middleware
         /// </summary>
         /// <param name="next">Instance of request delegate</param>
+        /// <param name="updateDelegate">Instance of update delegate</param>
         /// <param name="logger">Logger for this middleware</param>
         public TelegramBotMiddleware(
             RequestDelegate next,
@@ -57,7 +56,7 @@ namespace Telegram.Bot.Framework
                     .ConfigureAwait(false);
             }
 
-            _logger.LogDebug("Update payload:\n{0}", payload);
+            _logger.LogDebug("Update payload:\n{Payload}", payload);
 
             Update update = null;
             try
@@ -66,7 +65,7 @@ namespace Telegram.Bot.Framework
             }
             catch (JsonException e)
             {
-                _logger.LogError($"Unable to deserialize update payload. {e.Message}");
+                _logger.LogError("Unable to deserialize update payload {Exception}", e.ToString());
             }
 
             if (update == null)
@@ -90,7 +89,7 @@ namespace Telegram.Bot.Framework
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"Error occured while handling update `{update.Id}`. {e.Message}");
+                    _logger.LogError("Error occured while handling update `{UpdateId}`. {Message}", update.Id, e.ToString());
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 }
             }
@@ -102,5 +101,3 @@ namespace Telegram.Bot.Framework
         }
     }
 }
-
-#endif

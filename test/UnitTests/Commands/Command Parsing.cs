@@ -4,7 +4,7 @@ using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types;
 using Xunit;
 
-namespace UnitTests.NetCore.Commands
+namespace UnitTests.Commands
 {
     public class ArgumentParsingTests
     {

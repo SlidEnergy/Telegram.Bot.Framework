@@ -7,6 +7,10 @@ using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Framework
 {
+    /// <summary>
+    /// Update poll manager.
+    /// </summary>
+    /// <typeparam name="TBot"></typeparam>
     public class UpdatePollingManager<TBot> : IUpdatePollingManager<TBot>
              where TBot : IBot
     {
@@ -31,7 +35,7 @@ namespace Telegram.Bot.Framework
         {
             var bot = (TBot)_rootProvider.GetService(typeof(TBot));
 
-            await bot.Client.DeleteWebhookAsync(cancellationToken)
+            await bot.Client.DeleteWebhookAsync(true, cancellationToken)
                 .ConfigureAwait(false);
 
             requestParams = requestParams ?? new GetUpdatesRequest
@@ -43,7 +47,7 @@ namespace Telegram.Bot.Framework
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                Update[] updates = await bot.Client.MakeRequestAsync(
+                var updates = await bot.Client.MakeRequestAsync(
                     requestParams,
                     cancellationToken
                 ).ConfigureAwait(false);

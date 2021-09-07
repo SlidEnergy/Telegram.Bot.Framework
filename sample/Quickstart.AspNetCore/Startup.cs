@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Telegram.Bot.Framework;
+using Telegram.Bot.Framework.Abstractions;
 using Quickstart.AspNetCore.Handlers;
 using Quickstart.AspNetCore.Options;
 using Quickstart.AspNetCore.Services;
-using System;
-using Telegram.Bot.Framework;
-using Telegram.Bot.Framework.Abstractions;
 
 namespace Quickstart.AspNetCore
 {
@@ -39,7 +40,7 @@ namespace Quickstart.AspNetCore
             services.AddScoped<IWeatherService, WeatherService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

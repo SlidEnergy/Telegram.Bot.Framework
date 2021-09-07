@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telegram.Bot.Framework", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A77F7142-8E1D-4843-B862-12D7D4A8CD67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.NetCore", "test\UnitTests.NetCore\UnitTests.NetCore.csproj", "{D7706BF5-300E-4705-86FA-ECD073EF3F7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{D7706BF5-300E-4705-86FA-ECD073EF3F7E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{A5BE1637-1C1D-49F4-B98D-C1CD734F1CF1}"
 EndProject
