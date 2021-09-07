@@ -1,12 +1,11 @@
 ﻿using Quickstart.AspNetCore.Services;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    class WeatherReporter : IUpdateHandler
+    public class WeatherReporter : UpdateHandlerBase
     {
         private readonly IWeatherService _weatherService;
 
@@ -15,10 +14,12 @@ namespace Quickstart.AspNetCore.Handlers
             _weatherService = weatherService;
         }
 
-        public async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override bool CanHandle(IUpdateContext context) => When.LocationMessage(context);
+
+        public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            Message msg = context.Update.Message;
-            Location location = msg.Location;
+            var msg = context.Update.Message;
+            var location = msg.Location;
 
             var weather = await _weatherService.GetWeatherAsync(location.Latitude, location.Longitude);
 

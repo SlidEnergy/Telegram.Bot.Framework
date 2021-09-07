@@ -5,18 +5,18 @@ using Telegram.Bot.Framework.Abstractions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    class WebhookLogger : IUpdateHandler
+    public class WebhookLogger : UpdateHandlerBase
     {
         private readonly ILogger<WebhookLogger> _logger;
 
-        public WebhookLogger(
-            ILogger<WebhookLogger> logger
-        )
+        public WebhookLogger(ILogger<WebhookLogger> logger)
         {
             _logger = logger;
         }
+        
+        public override bool CanHandle(IUpdateContext context) => When.Webhook(context);
 
-        public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
             var httpContext = (HttpContext)context.Items[nameof(HttpContext)];
 

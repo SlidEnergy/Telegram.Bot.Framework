@@ -8,20 +8,17 @@ namespace Telegram.Bot.Framework
 {
     public class UpdateContext : IUpdateContext
     {
-        public IBot Bot { get; }
-
-        public Update Update { get; }
-
-        public IServiceProvider Services { get; }
-
-        public IDictionary<string, object> Items { get; }
-
-        public UpdateContext(IBot bot, Update u, IServiceProvider services)
+        public UpdateContext(IBot bot, Update update, IServiceProvider services)
         {
             Bot = bot;
-            Update = u;
+            Update = update;
             Services = services;
             Items = new ConcurrentDictionary<string, object>();
         }
+        
+        public IBot Bot { get; }
+        public Update Update { get; }
+        public IServiceProvider Services { get; }
+        public IDictionary<string, object> Items { get; }
     }
 }

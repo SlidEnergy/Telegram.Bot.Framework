@@ -14,9 +14,7 @@ namespace Telegram.Bot.Framework
         where TBot : BotBase
     {
         private readonly RequestDelegate _next;
-
         private readonly UpdateDelegate _updateDelegate;
-
         private readonly ILogger<TelegramBotMiddleware<TBot>> _logger;
 
         /// <summary>

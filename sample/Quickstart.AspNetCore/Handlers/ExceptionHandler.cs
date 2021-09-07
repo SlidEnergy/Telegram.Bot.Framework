@@ -4,9 +4,9 @@ using Telegram.Bot.Framework.Abstractions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    public class ExceptionHandler : IUpdateHandler
+    public class ExceptionHandler : UpdateHandlerBase
     {
-        public async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
             var u = context.Update;
 

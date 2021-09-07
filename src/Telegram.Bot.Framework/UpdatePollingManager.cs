@@ -1,8 +1,8 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Requests;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Framework
@@ -15,7 +15,6 @@ namespace Telegram.Bot.Framework
              where TBot : IBot
     {
         private readonly UpdateDelegate _updateDelegate;
-
         private readonly IBotServiceProvider _rootProvider;
 
         public UpdatePollingManager(
@@ -38,11 +37,11 @@ namespace Telegram.Bot.Framework
             await bot.Client.DeleteWebhookAsync(true, cancellationToken)
                 .ConfigureAwait(false);
 
-            requestParams = requestParams ?? new GetUpdatesRequest
+            requestParams ??= new GetUpdatesRequest
             {
                 Offset = 0,
                 Timeout = 500,
-                AllowedUpdates = new UpdateType[0],
+                AllowedUpdates = Array.Empty<UpdateType>(),
             };
 
             while (!cancellationToken.IsCancellationRequested)
@@ -54,18 +53,16 @@ namespace Telegram.Bot.Framework
 
                 foreach (var update in updates)
                 {
-                    using (var scopeProvider = _rootProvider.CreateScope())
-                    {
-                        var context = new UpdateContext(bot, update, scopeProvider);
-                        // ToDo deep clone bot instance for each update
-                        await _updateDelegate(context)
-                            .ConfigureAwait(false);
-                    }
+                    using var scopeProvider = _rootProvider.CreateScope();
+                    var context = new UpdateContext(bot, update, scopeProvider);
+                    // ToDo deep clone bot instance for each update
+                    await _updateDelegate(context)
+                        .ConfigureAwait(false);
                 }
 
                 if (updates.Length > 0)
                 {
-                    requestParams.Offset = updates[updates.Length - 1].Id + 1;
+                    requestParams.Offset = updates[^1].Id + 1;
                 }
             }
 

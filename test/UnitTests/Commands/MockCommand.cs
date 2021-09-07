@@ -4,16 +4,16 @@ using Telegram.Bot.Framework.Abstractions;
 
 namespace UnitTests.Commands
 {
-    class MockCommand : CommandBase
+    public class MockCommand : CommandBase
     {
         private readonly Func<IUpdateContext, UpdateDelegate, string[], Task> _handler;
 
-        public MockCommand(Func<IUpdateContext, UpdateDelegate, string[], Task> handler)
+        public MockCommand(Func<IUpdateContext, UpdateDelegate, string[], Task> handler) : base("mock")
         {
             _handler = handler;
         }
 
-        public override Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args)
+        protected override Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args)
             => _handler(context, next, args);
     }
 }

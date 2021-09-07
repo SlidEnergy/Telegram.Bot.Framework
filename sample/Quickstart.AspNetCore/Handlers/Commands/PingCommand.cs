@@ -1,16 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    class PingCommand : CommandBase
+    public class PingCommand : CommandBase
     {
-        public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args)
+        public PingCommand() : base("ping")
         {
-            Message msg = context.Update.Message;
+        }
+        
+        protected override async Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args)
+        {
+            var msg = context.Update.Message;
 
             await context.Bot.Client.SendTextMessageAsync(
                 msg.Chat,
@@ -22,5 +25,7 @@ namespace Quickstart.AspNetCore.Handlers
                 )
             );
         }
+
+        
     }
 }

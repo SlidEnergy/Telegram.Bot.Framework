@@ -9,15 +9,27 @@ using Telegram.Bot.Types.Enums;
 namespace Telegram.Bot.Framework.Abstractions
 {
     /// <summary>
-    /// Base handler implementation for a command such as "/start"
+    /// Base handler implementation for a commandName such as "/start"
     /// </summary>
     public abstract class CommandBase : IUpdateHandler
     {
-        public abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
+        private readonly string _commandName;
+
+        protected CommandBase(string commandName)
+        {
+            _commandName = commandName;
+        }
+
+        public virtual bool CanHandle(IUpdateContext context) =>
+            context.Bot.CanHandleCommand(_commandName, context.Update.Message);
+
+        protected abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
 
         public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            return HandleAsync(context, next, ParseCommandArgs(context.Update.Message));
+            return CanHandle(context) ? 
+                HandleAsync(context, next, ParseCommandArgs(context.Update.Message)) 
+                : next(context);
         }
 
         public static string[] ParseCommandArgs(Message message)
@@ -25,10 +37,10 @@ namespace Telegram.Bot.Framework.Abstractions
             if (message is null)
                 throw new ArgumentNullException(nameof(message));
             if (message.Entities?.FirstOrDefault()?.Type != MessageEntityType.BotCommand)
-                throw new ArgumentException("Message is not a command", nameof(message));
+                throw new ArgumentException("Message is not a commandName", nameof(message));
 
             var argsList = new List<string>();
-            string allArgs = message.Text.Substring(message.Entities[0].Length).TrimStart();
+            var allArgs = message.Text[message.Entities[0].Length..].TrimStart();
             argsList.Add(allArgs);
 
             var expandedArgs = Regex.Split(allArgs, @"\s+");
@@ -37,7 +49,7 @@ namespace Telegram.Bot.Framework.Abstractions
                 argsList.AddRange(expandedArgs);
             }
 
-            string[] args = argsList
+            var args = argsList
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToArray();
 

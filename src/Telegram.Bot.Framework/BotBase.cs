@@ -4,10 +4,6 @@ namespace Telegram.Bot.Framework
 {
     public abstract class BotBase : IBot
     {
-        public ITelegramBotClient Client { get; }
-
-        public string Username { get; }
-
         protected BotBase(string username, ITelegramBotClient client)
         {
             Username = username;
@@ -23,5 +19,8 @@ namespace Telegram.Bot.Framework
             : this(options.Username, new TelegramBotClient(options.ApiToken))
         {
         }
+        
+        public ITelegramBotClient Client { get; }
+        public string Username { get; }
     }
 }

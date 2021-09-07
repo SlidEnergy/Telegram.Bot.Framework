@@ -20,11 +20,11 @@ namespace UnitTests
         [InlineData("/test@test_bot  !", "/test@test_bot")]
         public void Should_Parse_Valid_Commands(string text, string commandValue)
         {
-            Mock<IBot> mockBot = new Mock<IBot>();
+            var mockBot = new Mock<IBot>();
             mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
 
-            IBot bot = mockBot.Object;
-            Message message = new Message
+            var bot = mockBot.Object;
+            var message = new Message
             {
                 Text = text,
                 Entities = new[]
@@ -38,7 +38,7 @@ namespace UnitTests
                 },
             };
 
-            bool result = bot.CanHandleCommand("test", message);
+            var result = bot.CanHandleCommand("test", message);
 
             Assert.True(result);
         }
@@ -54,16 +54,16 @@ namespace UnitTests
         [InlineData("/tes@test_bot")]
         public void Should_Not_Parse_Invalid_Command_Text(string text)
         {
-            Mock<IBot> mockBot = new Mock<IBot>();
+            var mockBot = new Mock<IBot>();
             mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
 
-            IBot bot = mockBot.Object;
-            Message message = new Message
+            var bot = mockBot.Object;
+            var message = new Message
             {
                 Text = text,
             };
 
-            bool result = bot.CanHandleCommand("test", message);
+            var result = bot.CanHandleCommand("test", message);
 
             Assert.False(result);
         }
@@ -71,16 +71,16 @@ namespace UnitTests
         [Fact(DisplayName = "Should not accept handling non-text messages")]
         public void Should_Refuse_Handling_Non_Message_Updates()
         {
-            Mock<IBot> mockBot = new Mock<IBot>();
+            var mockBot = new Mock<IBot>();
             mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
 
-            IBot bot = mockBot.Object;
-            Message message = new Message
+            var bot = mockBot.Object;
+            var message = new Message
             {
                 Text = null,
             };
 
-            bool result = bot.CanHandleCommand("test", message);
+            var result = bot.CanHandleCommand("test", message);
 
             Assert.False(result);
         }

@@ -8,6 +8,13 @@ namespace Telegram.Bot.Framework.Abstractions
     public interface IUpdateHandler
     {
         /// <summary>
+        /// Predicate where determines update can be handled or not.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
+        /// <returns>True if update can be handled</returns>
+        bool CanHandle(IUpdateContext context);
+        
+        /// <summary>
         /// Handles the update for bot. This method will be called only if CanHandleUpdate returns <value>true</value>
         /// </summary>
         /// <param name="context">Instance of <see cref="IUpdateContext"/></param>

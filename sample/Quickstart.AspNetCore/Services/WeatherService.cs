@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Quickstart.AspNetCore.Services
 {
-    class WeatherService : IWeatherService
+    public class WeatherService : IWeatherService
     {
         private readonly HttpClient _client;
 

@@ -4,9 +4,11 @@ using Telegram.Bot.Framework.Abstractions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    class UpdateMembersList : IUpdateHandler
+    public class UpdateMembersList : UpdateHandlerBase
     {
-        public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override bool CanHandle(IUpdateContext context) => When.MembersChanged(context);
+
+        public override Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Yellow;

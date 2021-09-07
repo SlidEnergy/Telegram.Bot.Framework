@@ -1,17 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
-using Telegram.Bot.Types;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    public class CallbackQueryHandler : IUpdateHandler
+    public class CallbackQueryHandler : UpdateHandlerBase
     {
-        public async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override bool CanHandle(IUpdateContext context) => When.CallbackQuery(context);
+
+        public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            CallbackQuery cq = context.Update.CallbackQuery;
-
-            await context.Bot.Client.AnswerCallbackQueryAsync(cq.Id, "PONG", showAlert: true);
-
+            var cq = context.Update.CallbackQuery;
+            await context.Bot.Client.AnswerCallbackQueryAsync(cq.Id, "PONG", true);
             await next(context);
         }
     }

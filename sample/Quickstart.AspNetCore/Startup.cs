@@ -28,6 +28,7 @@ namespace Quickstart.AspNetCore
                 .Configure<BotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
                 .Configure<CustomBotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
                 .AddScoped<TextEchoer>()
+                .AddScoped<TextFilter>()
                 .AddScoped<PingCommand>()
                 .AddScoped<StartCommand>()
                 .AddScoped<WebhookLogger>()
@@ -48,7 +49,7 @@ namespace Quickstart.AspNetCore
 
                 // get bot updates from Telegram via long-polling approach during development
                 // this will disable Telegram webhooks
-                app.UseTelegramBotLongPolling<EchoBot>(ConfigureBot(), startAfter: TimeSpan.FromSeconds(2));
+                app.UseTelegramBotLongPolling<EchoBot>(ConfigureBot(), TimeSpan.FromSeconds(2));
             }
             else
             {
@@ -68,29 +69,15 @@ namespace Quickstart.AspNetCore
         {
             return new BotBuilder()
                 .Use<ExceptionHandler>()
-
-                // .Use<CustomUpdateLogger>()
-                .UseWhen<WebhookLogger>(When.Webhook)
-
-                .UseWhen<UpdateMembersList>(When.MembersChanged)
-
-                .MapWhen(When.NewMessage, msgBranch => msgBranch
-                    .MapWhen(When.NewTextMessage, txtBranch => txtBranch
-                        .Use<TextEchoer>()
-                        .MapWhen(When.NewCommand, cmdBranch => cmdBranch
-                            .UseCommand<PingCommand>("ping")
-                            .UseCommand<StartCommand>("start")
-                        )
-                    //.Use<NLP>()
-                    )
-                    .MapWhen<StickerHandler>(When.StickerMessage)
-                    .MapWhen<WeatherReporter>(When.LocationMessage)
-                )
-
-                .MapWhen<CallbackQueryHandler>(When.CallbackQuery)
-
-                // .Use<UnhandledUpdateReporter>()
-                ;
+                .Use<WebhookLogger>()
+                .Use<UpdateMembersList>()
+                .Use<TextEchoer>()
+                .Use<TextFilter>()
+                .Use<StickerHandler>()
+                .Use<WeatherReporter>()
+                .Use<CallbackQueryHandler>()
+                .Use<PingCommand>()
+                .Use<StartCommand>();
         }
     }
 }

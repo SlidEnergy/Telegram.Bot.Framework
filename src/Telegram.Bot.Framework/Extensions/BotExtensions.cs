@@ -19,13 +19,13 @@ namespace Telegram.Bot.Framework
                 throw new ArgumentException("Command name must not start with '/'.", nameof(commandName));
 
             {
-                bool isTextMessage = message.Text != null;
+                var isTextMessage = message.Text != null;
                 if (!isTextMessage)
                     return false;
             }
 
             {
-                bool isCommand = message.Entities?.FirstOrDefault()?.Type == MessageEntityType.BotCommand;
+                var isCommand = message.Entities?.FirstOrDefault()?.Type == MessageEntityType.BotCommand;
                 if (!isCommand)
                     return false;
             }

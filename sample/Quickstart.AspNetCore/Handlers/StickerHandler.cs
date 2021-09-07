@@ -1,24 +1,25 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
-using Telegram.Bot.Types;
 
 namespace Quickstart.AspNetCore.Handlers
 {
-    class StickerHandler : IUpdateHandler
+    public class StickerHandler : UpdateHandlerBase
     {
-        public async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
+        public override bool CanHandle(IUpdateContext context) => When.StickerMessage(context);
+
+        public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            Message msg = context.Update.Message;
-            Sticker incomingSticker = msg.Sticker;
+            var msg = context.Update.Message;
+            var incomingSticker = msg.Sticker;
 
-            StickerSet evilMindsSet = await context.Bot.Client.GetStickerSetAsync("EvilMinds");
+            var evilMindsSet = await context.Bot.Client.GetStickerSetAsync("EvilMinds");
 
-            Sticker similarEvilMindSticker = evilMindsSet.Stickers.FirstOrDefault(
+            var similarEvilMindSticker = evilMindsSet.Stickers.FirstOrDefault(
                 sticker => incomingSticker.Emoji.Contains(sticker.Emoji)
             );
 
-            Sticker replySticker = similarEvilMindSticker ?? evilMindsSet.Stickers.First();
+            var replySticker = similarEvilMindSticker ?? evilMindsSet.Stickers.First();
 
             await context.Bot.Client.SendStickerAsync(
                 msg.Chat,

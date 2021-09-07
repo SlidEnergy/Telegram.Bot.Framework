@@ -9,7 +9,6 @@ namespace Telegram.Bot.Framework
     public class BotBuilder : IBotBuilder
     {
         internal UpdateDelegate UpdateDelegate { get; private set; }
-
         private readonly ICollection<Func<UpdateDelegate, UpdateDelegate>> _components;
 
         public BotBuilder()
@@ -17,20 +16,18 @@ namespace Telegram.Bot.Framework
             _components = new List<Func<UpdateDelegate, UpdateDelegate>>();
         }
 
-        public IBotBuilder Use(Func<UpdateDelegate, UpdateDelegate> middleware)
-        {
-            throw new NotImplementedException();
-        }
-
         public IBotBuilder Use<THandler>()
             where THandler : IUpdateHandler
         {
-            _components.Add(
-                next =>
-                context =>
-                ((IUpdateHandler)context.Services.GetService(typeof(THandler)))
-                    .HandleAsync(context, next)
-            );
+            _components.Add(next =>
+            {
+                return context =>
+                {
+                    var handler = (IUpdateHandler)context.Services.GetService(typeof(THandler));
+                    return handler.CanHandle(context) ? 
+                        handler.HandleAsync(context, next) : next(context);
+                };
+            });
 
             return this;
         }
@@ -39,15 +36,12 @@ namespace Telegram.Bot.Framework
             where THandler : IUpdateHandler
         {
             _components.Add(next =>
-                context => handler.HandleAsync(context, next)
-            );
+            {
+                return context => handler.CanHandle(context) ? 
+                    handler.HandleAsync(context, next) : next(context);
+            });
 
             return this;
-        }
-
-        public IBotBuilder Use(Func<IUpdateContext, UpdateDelegate> component)
-        {
-            throw new NotImplementedException();
         }
 
         public UpdateDelegate Build()
@@ -59,10 +53,8 @@ namespace Telegram.Bot.Framework
                 return Task.FromResult(1);
             };
 
-            foreach (var component in _components.Reverse())
-            {
-                handle = component(handle);
-            }
+            handle = _components.Reverse()
+                .Aggregate(handle, (current, component) => component(current));
 
             return UpdateDelegate = handle;
         }

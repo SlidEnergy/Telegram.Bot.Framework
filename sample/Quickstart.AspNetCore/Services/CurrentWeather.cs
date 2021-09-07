@@ -1,6 +1,6 @@
 ﻿namespace Quickstart.AspNetCore.Services
 {
-    struct CurrentWeather
+    public struct CurrentWeather
     {
         public string Status;
         public float Temp;
