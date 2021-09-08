@@ -19,18 +19,23 @@ namespace Telegram.Bot.Framework
 
         public UpdatePollingManager(
             IBotBuilder botBuilder,
-            IBotServiceProvider rootProvider
-        )
+            IBotServiceProvider rootProvider)
         {
-            // ToDo Receive update types array
             _updateDelegate = botBuilder.Build();
+            _rootProvider = rootProvider;
+        }
+        
+        public UpdatePollingManager(
+            UpdateDelegate updateDelegate,
+            IBotServiceProvider rootProvider)
+        {
+            _updateDelegate = updateDelegate;
             _rootProvider = rootProvider;
         }
 
         public async Task RunAsync(
             GetUpdatesRequest requestParams = default,
-            CancellationToken cancellationToken = default
-        )
+            CancellationToken cancellationToken = default)
         {
             var bot = (TBot)_rootProvider.GetService(typeof(TBot));
 

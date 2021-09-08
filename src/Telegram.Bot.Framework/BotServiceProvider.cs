@@ -8,7 +8,6 @@ namespace Telegram.Bot.Framework
     internal class BotServiceProvider : IBotServiceProvider
     {
         private readonly IServiceProvider _container;
-
         private readonly IServiceScope _scope;
 
         public BotServiceProvider(IApplicationBuilder app)

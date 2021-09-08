@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 using Quickstart.AspNetCore.Handlers;
-using Quickstart.AspNetCore.Options;
 using Quickstart.AspNetCore.Services;
 
 namespace Quickstart.AspNetCore
@@ -26,7 +25,6 @@ namespace Quickstart.AspNetCore
         {
             services.AddTransient<EchoBot>()
                 .Configure<BotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
-                .Configure<CustomBotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
                 .AddScoped<TextEchoer>()
                 .AddScoped<TextFilter>()
                 .AddScoped<PingCommand>()
