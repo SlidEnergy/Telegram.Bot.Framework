@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>TelegramBot.Framework</PackageId>
+    <PackageId>Telegram.Bot.MagicFramework</PackageId>
     <PackageVersion>3.0.0</PackageVersion>
     <TargetFramework>netstandard2.1</TargetFramework>
 
@@ -9,19 +9,27 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
-    <Title>Extended Telegram Bot Framework</Title>
-    <Description>Simple framework for building powerful Telegram bots 🤖</Description>
-    <Authors>Sukhrob Ilyosbekov</Authors>
+    <Title>Telegram Bot Framework</Title>
+    <Description>Extended verison of telegram bot framework for building powerful Telegram bots 🤖</Description>
+    <Authors>Sukhrob Ilyosbekov, Poulad, TelegramBots</Authors>
     <PackageTags>telegram;bot;chatbot;chat-framework;framework;netcore</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/suxrobGM/Telegram.Bot.Framework</PackageProjectUrl>
     <RepositoryUrl>https://github.com/suxrobGM/Telegram.Bot.Framework.git</RepositoryUrl>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\docs\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Telegram.Bot" Version="16.0.2" />

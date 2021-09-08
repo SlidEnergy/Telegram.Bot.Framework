@@ -19,7 +19,7 @@ namespace Telegram.Bot.Framework
             : this(options.Username, new TelegramBotClient(options.ApiToken))
         {
         }
-        
+
         public ITelegramBotClient Client { get; }
         public string Username { get; }
     }

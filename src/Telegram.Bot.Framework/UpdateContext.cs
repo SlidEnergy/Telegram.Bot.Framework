@@ -15,7 +15,7 @@ namespace Telegram.Bot.Framework
             Services = services;
             Items = new ConcurrentDictionary<string, object>();
         }
-        
+
         public IBot Bot { get; }
         public Update Update { get; }
         public IServiceProvider Services { get; }

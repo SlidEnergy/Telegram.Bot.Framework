@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Telegram.Bot.Framework.Abstractions;
 
-namespace Quickstart.AspNetCore.Services
+namespace Telegram.Bot.Framework
 {
     internal class BotServiceProvider : IBotServiceProvider
     {
