@@ -48,7 +48,8 @@ namespace Microsoft.AspNetCore.Builder
                 startAfter = TimeSpan.FromSeconds(2);
             }
 
-            var updateManager = new UpdatePollingManager<TBot>(botBuilder, new BotServiceProvider(app));
+            var serviceProvider = new BotServiceProvider(app);
+            var updateManager = new UpdatePollingManager<TBot>(botBuilder, serviceProvider);
 
             Task.Run(async () =>
             {
@@ -56,10 +57,12 @@ namespace Microsoft.AspNetCore.Builder
                 await updateManager.RunAsync(cancellationToken: cancellationToken);
             }, cancellationToken)
             .ContinueWith(t =>
-            {// ToDo use logger
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(t.Exception);
-                Console.ResetColor();
+            {
+                if (t.Exception == null)
+                    return;
+
+                var logger = serviceProvider.GetService(typeof(ILogger<BotBase>)) as ILogger<BotBase>;
+                logger?.LogError("Thrown exception in UseTelegramBotLongPolling(): {Exception}", t.Exception);
                 throw t.Exception;
             }, TaskContinuationOptions.OnlyOnFaulted);
 
@@ -69,18 +72,16 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder EnsureWebhookSet<TBot>(this IApplicationBuilder app)
             where TBot : IBot
         {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-                var bot = scope.ServiceProvider.GetRequiredService<TBot>();
-                var options = scope.ServiceProvider.GetRequiredService<IOptions<BotOptions<TBot>>>();
-                var url = new Uri(options.Value.WebhookPath);
+            using var scope = app.ApplicationServices.CreateScope();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
+            var bot = scope.ServiceProvider.GetRequiredService<TBot>();
+            var options = scope.ServiceProvider.GetRequiredService<IOptions<BotOptions<TBot>>>();
+            var url = new Uri(options.Value.WebhookPath);
 
-                logger?.LogInformation("Setting webhook for bot \"{0}\" to URL \"{1}\"", typeof(TBot).Name, url);
+            logger?.LogInformation("Setting webhook for bot \"{Name}\" to URL \"{Url}\"", typeof(TBot).Name, url);
 
-                bot.Client.SetWebhookAsync(url.AbsoluteUri)
-                    .GetAwaiter().GetResult();
-            }
+            bot.Client.SetWebhookAsync(url.AbsoluteUri)
+                .GetAwaiter().GetResult();
 
             return app;
         }
