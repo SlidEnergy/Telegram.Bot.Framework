@@ -1,17 +1,23 @@
 ﻿namespace Telegram.Bot.Framework.Abstractions
 {
     /// <summary>
-    /// Configurations for the bot
+    /// Configurations for the bot.
     /// </summary>
     public interface IBotOptions
     {
-        string Username { get; }
+        /// <summary>
+        /// Username of the bot.
+        /// </summary>
+        string Username { get; set; }
 
         /// <summary>
-        /// Optional if client not needed. Telegram API token
+        /// Optional if client not needed. Telegram API token.
         /// </summary>
-        string ApiToken { get; }
+        string ApiToken { get; set; }
 
-        string WebhookPath { get; }
+        /// <summary>
+        /// URL path to webhook address.
+        /// </summary>
+        string WebhookPath { get; set; }
     }
 }

@@ -67,7 +67,8 @@ namespace Telegram.Bot.Framework
         /// <returns>Instance of <see cref="IBotBuilder"/></returns>
         internal IBotBuilder Use(Type handlerType)
         {
-            if (!handlerType.IsAssignableFrom(typeof(IUpdateHandler)))
+            var handlerInterfaceType = typeof(IUpdateHandler);
+            if (!handlerInterfaceType.IsAssignableFrom(handlerType))
                 throw new InvalidOperationException($"Type {handlerType.Name} is not assignable to IUpdateHandler");
             
             _components.Add(next =>
@@ -109,11 +110,13 @@ namespace Telegram.Bot.Framework
         internal static UpdateDelegate BuildBotAutomatically()
         {
             var builder = new BotBuilder();
+            var handlerInterfaceType = typeof(IUpdateHandler);
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (var type in assemblies.SelectMany(i => i.DefinedTypes))
             {
-                if (type.IsAssignableFrom(typeof(IUpdateHandler)))
+                if (handlerInterfaceType.IsAssignableFrom(type) &&
+                    type.IsClass && !type.IsAbstract)
                 {
                     builder.Use(type);
                 }

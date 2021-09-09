@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot.Framework;
-using Telegram.Bot.Framework.Abstractions;
-using Quickstart.AspNetCore.Handlers;
 using Quickstart.AspNetCore.Services;
 
 namespace Quickstart.AspNetCore
@@ -23,19 +21,8 @@ namespace Quickstart.AspNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<EchoBot>()
-                .Configure<BotOptions<EchoBot>>(Configuration.GetSection("EchoBot"))
-                .AddScoped<TextEchoer>()
-                .AddScoped<TextFilter>()
-                .AddScoped<PingCommand>()
-                .AddScoped<StartCommand>()
-                .AddScoped<WebhookLogger>()
-                .AddScoped<StickerHandler>()
-                .AddScoped<WeatherReporter>()
-                .AddScoped<ExceptionHandler>()
-                .AddScoped<UpdateMembersList>()
-                .AddScoped<CallbackQueryHandler>()
-            ;
+            var botOptions = Configuration.GetSection("EchoBot").Get<BotOptions>();
+            services.AddTelegramBot<EchoBot>(botOptions);
             services.AddScoped<IWeatherService, WeatherService>();
         }
 
@@ -47,12 +34,12 @@ namespace Quickstart.AspNetCore
 
                 // get bot updates from Telegram via long-polling approach during development
                 // this will disable Telegram webhooks
-                app.UseTelegramBotLongPolling<EchoBot>(ConfigureBot(), TimeSpan.FromSeconds(2));
+                app.UseTelegramBotLongPolling<EchoBot>(TimeSpan.FromSeconds(2));
             }
             else
             {
                 // use Telegram bot webhook middleware in higher environments
-                app.UseTelegramBotWebhook<EchoBot>(ConfigureBot());
+                app.UseTelegramBotWebhook<EchoBot>();
                 // and make sure webhook is enabled
                 app.EnsureWebhookSet<EchoBot>();
             }
@@ -61,21 +48,6 @@ namespace Quickstart.AspNetCore
             {
                 await context.Response.WriteAsync("Hello World!");
             });
-        }
-
-        private IBotBuilder ConfigureBot()
-        {
-            return new BotBuilder()
-                .Use<ExceptionHandler>()
-                .Use<WebhookLogger>()
-                .Use<UpdateMembersList>()
-                .Use<TextEchoer>()
-                .Use<TextFilter>()
-                .Use<StickerHandler>()
-                .Use<WeatherReporter>()
-                .Use<CallbackQueryHandler>()
-                .Use<PingCommand>()
-                .Use<StartCommand>();
         }
     }
 }

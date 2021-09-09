@@ -11,7 +11,7 @@ using Telegram.Bot.Types;
 namespace Telegram.Bot.Framework
 {
     internal class TelegramBotMiddleware<TBot>
-        where TBot : BotBase
+        where TBot : IBot
     {
         private readonly RequestDelegate _next;
         private readonly UpdateDelegate _updateDelegate;

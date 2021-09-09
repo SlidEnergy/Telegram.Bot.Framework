@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Builder
     /// <summary>
     /// Extenstion methods for adding Telegram Bot framework to the ASP.NET Core middleware
     /// </summary>
-    public static class TelegramBotMiddlewareExtensions
+    public static class MiddlewareExtensions
     {
         #region Webhook methods
 
@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="app">Instance of <see cref="IApplicationBuilder"/></param>
         /// <returns>Instance of <see cref="IApplicationBuilder"/></returns>
         public static IApplicationBuilder UseTelegramBotWebhook<TBot>(
-            this IApplicationBuilder app) where TBot : BotBase
+            this IApplicationBuilder app) where TBot : IBot
         {
             var updateDelegate = BotBuilder.BuildBotAutomatically();
             return app.UseTelegramBotWebhook<TBot>(updateDelegate);
@@ -37,7 +37,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="botBuilder">Instance of <see cref="IBotBuilder"/></param>
         /// <returns>Instance of <see cref="IApplicationBuilder"/></returns>
         public static IApplicationBuilder UseTelegramBotWebhook<TBot>(this IApplicationBuilder app,
-            IBotBuilder botBuilder) where TBot : BotBase
+            IBotBuilder botBuilder) where TBot : IBot
         {
             var updateDelegate = botBuilder.Build();
             return app.UseTelegramBotWebhook<TBot>(updateDelegate);
@@ -52,9 +52,9 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="updateDelegate">Update delegate</param>
         /// <returns>Instance of <see cref="IApplicationBuilder"/></returns>
         public static IApplicationBuilder UseTelegramBotWebhook<TBot>(this IApplicationBuilder app,
-            UpdateDelegate updateDelegate) where TBot : BotBase
+            UpdateDelegate updateDelegate) where TBot : IBot
         {
-            var options = app.ApplicationServices.GetRequiredService<IOptions<BotOptions<TBot>>>();
+            var options = app.ApplicationServices.GetRequiredService<IOptions<IBotOptions>>();
             app.Map(
                 options.Value.WebhookPath,
                 builder => builder.UseMiddleware<TelegramBotMiddleware<TBot>>(updateDelegate)
@@ -73,9 +73,9 @@ namespace Microsoft.AspNetCore.Builder
             where TBot : IBot
         {
             using var scope = app.ApplicationServices.CreateScope();
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<BotBase>>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<IBot>>();
             var bot = scope.ServiceProvider.GetRequiredService<TBot>();
-            var options = scope.ServiceProvider.GetRequiredService<IOptions<BotOptions<TBot>>>();
+            var options = scope.ServiceProvider.GetRequiredService<IOptions<IBotOptions>>();
             var url = new Uri(options.Value.WebhookPath);
 
             logger?.LogInformation("Setting webhook for bot \"{Name}\" to URL \"{Url}\"", typeof(TBot).Name, url);
@@ -100,7 +100,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns>Instance of <see cref="IApplicationBuilder"/></returns>
         public static IApplicationBuilder UseTelegramBotLongPolling<TBot>(this IApplicationBuilder app,
             TimeSpan startAfter = default,
-            CancellationToken cancellationToken = default) where TBot : BotBase
+            CancellationToken cancellationToken = default) where TBot : IBot
         {
             var updateDelegate = BotBuilder.BuildBotAutomatically();
             return app.UseTelegramBotLongPolling<TBot>(updateDelegate, startAfter, cancellationToken);
@@ -118,7 +118,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseTelegramBotLongPolling<TBot>(this IApplicationBuilder app,
             IBotBuilder botBuilder,
             TimeSpan startAfter = default,
-            CancellationToken cancellationToken = default) where TBot : BotBase
+            CancellationToken cancellationToken = default) where TBot : IBot
         {
             var updateDelegate = botBuilder.Build();
             return app.UseTelegramBotLongPolling<TBot>(updateDelegate, startAfter, cancellationToken);
@@ -136,7 +136,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseTelegramBotLongPolling<TBot>(this IApplicationBuilder app,
             UpdateDelegate updateDelegate,
             TimeSpan startAfter = default,
-            CancellationToken cancellationToken = default) where TBot : BotBase
+            CancellationToken cancellationToken = default) where TBot : IBot
         {
             if (startAfter == default)
             {
@@ -156,7 +156,7 @@ namespace Microsoft.AspNetCore.Builder
                     if (t.Exception == null)
                         return;
 
-                    var logger = serviceProvider.GetService(typeof(ILogger<BotBase>)) as ILogger<BotBase>;
+                    var logger = serviceProvider.GetService(typeof(ILogger<IBot>)) as ILogger<IBot>;
                     logger?.LogError("Thrown exception in UseTelegramBotLongPolling(): {Exception}", t.Exception);
                     throw t.Exception;
                 }, TaskContinuationOptions.OnlyOnFaulted);
