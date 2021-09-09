@@ -14,15 +14,15 @@ namespace Telegram.Bot.Framework
         /// <param name="configureOptions">Bot options to configure</param>
         /// <typeparam name="TBot">Type of bot</typeparam>
         /// <returns>Instance of <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddTelegramBot<TBot>(this IServiceCollection services, 
+        public static IServiceCollection AddTelegramBot<TBot>(this IServiceCollection services,
             Action<IBotOptions> configureOptions) where TBot : IBot
         {
             services.AddScoped(typeof(TBot))
                 .Configure(configureOptions);
-            
+
             return AddHandlersToContainer(services);
         }
-        
+
         /// <summary>
         /// Adds bot handlers to services container.
         /// </summary>
@@ -30,7 +30,7 @@ namespace Telegram.Bot.Framework
         /// <param name="options">Bot options to configure</param>
         /// <typeparam name="TBot">Type of bot</typeparam>
         /// <returns>Instance of <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddTelegramBot<TBot>(this IServiceCollection services, 
+        public static IServiceCollection AddTelegramBot<TBot>(this IServiceCollection services,
             IBotOptions options) where TBot : IBot
         {
             services.AddScoped(typeof(TBot))

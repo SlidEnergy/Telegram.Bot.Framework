@@ -24,7 +24,7 @@ namespace Telegram.Bot.Framework
             _updateDelegate = botBuilder.Build();
             _rootProvider = rootProvider;
         }
-        
+
         public UpdatePollingManager(
             UpdateDelegate updateDelegate,
             IBotServiceProvider rootProvider)
