@@ -19,7 +19,6 @@
     <RepositoryUrl>https://github.com/suxrobGM/Telegram.Bot.Framework.git</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
 	<Copyright>Sukhrob Ilyosbekov</Copyright>
-	<PackageLicenseFile>C:\Users\suxrobgm\source\repos\Telegram.Bot.Framework\LICENSE</PackageLicenseFile>
 	<NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
