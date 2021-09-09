@@ -15,7 +15,7 @@ namespace Telegram.Bot.Framework
         {
         }
 
-        protected BotBase(IBotOptions options)
+        protected BotBase(BotOptions options)
             : this(options.Username, new TelegramBotClient(options.ApiToken))
         {
         }

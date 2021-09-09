@@ -13,10 +13,6 @@ namespace Quickstart.AspNetCore
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostBuilder, configBuilder) => configBuilder
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile($"appsettings.{hostBuilder.HostingEnvironment.EnvironmentName}.json", true)
-                    .AddJsonEnvVar("QUICKSTART_SETTINGS", true)
-                ).UseStartup<Startup>();
+                .UseStartup<Startup>();
     }
 }

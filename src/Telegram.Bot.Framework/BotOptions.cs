@@ -5,7 +5,7 @@ namespace Telegram.Bot.Framework
     /// <summary>
     /// Configurations for the bot.
     /// </summary>
-    public class BotOptions : IBotOptions
+    public class BotOptions
     {
         /// <summary>
         /// Username of the bot.

@@ -54,7 +54,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseTelegramBotWebhook<TBot>(this IApplicationBuilder app,
             UpdateDelegate updateDelegate) where TBot : IBot
         {
-            var options = app.ApplicationServices.GetRequiredService<IOptions<IBotOptions>>();
+            var options = app.ApplicationServices.GetRequiredService<IOptions<BotOptions>>();
             app.Map(
                 options.Value.WebhookPath,
                 builder => builder.UseMiddleware<TelegramBotMiddleware<TBot>>(updateDelegate)
@@ -75,7 +75,7 @@ namespace Microsoft.AspNetCore.Builder
             using var scope = app.ApplicationServices.CreateScope();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<IBot>>();
             var bot = scope.ServiceProvider.GetRequiredService<TBot>();
-            var options = scope.ServiceProvider.GetRequiredService<IOptions<IBotOptions>>();
+            var options = scope.ServiceProvider.GetRequiredService<IOptions<BotOptions>>();
             var url = new Uri(options.Value.WebhookPath);
 
             logger?.LogInformation("Setting webhook for bot \"{Name}\" to URL \"{Url}\"", typeof(TBot).Name, url);
