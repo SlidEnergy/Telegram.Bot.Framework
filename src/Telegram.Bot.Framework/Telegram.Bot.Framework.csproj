@@ -19,6 +19,7 @@
     <PackageIcon>icon.png</PackageIcon>
 	<Copyright>Sukhrob Ilyosbekov</Copyright>
 	<NoWarn>1701;1702;1591</NoWarn>
+	<PackageVersion>3.0.2</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
