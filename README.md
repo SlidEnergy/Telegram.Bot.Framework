@@ -1,5 +1,7 @@
 ﻿# Extended Telegram Bot Framework for .NET
 
+[![NuGet](https://img.shields.io/nuget/v/Telegram.Bot.MagicFramework)](https://www.nuget.org/packages/Telegram.Bot.MagicFramework)
+[![License](https://img.shields.io/github/license/suxrobgm/Telegram.Bot.Framework)](https://github.com/suxrobGM/Telegram.Bot.Framework/raw/master/LICENSE)
 
 <img src="./docs/icon.png" alt="Telegram Bot Framework Logo" width=200 height=200 />
 
