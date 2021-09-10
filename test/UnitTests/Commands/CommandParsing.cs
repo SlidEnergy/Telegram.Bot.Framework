@@ -63,7 +63,7 @@ namespace UnitTests.Commands
                 CommandBase.ParseCommandArgs(null)
             );
 
-            Assert.Equal("Value cannot be null.\nParameter name: message", e.Message);
+            Assert.Equal("Value cannot be null. (Parameter 'message')", e.Message);
             Assert.Equal("message", e.ParamName);
         }
 
@@ -81,7 +81,7 @@ namespace UnitTests.Commands
                 CommandBase.ParseCommandArgs(message)
             );
 
-            Assert.Equal("Message is not a command\nParameter name: message", e.Message);
+            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
             Assert.Equal("message", e.ParamName);
         }
 
@@ -100,7 +100,7 @@ namespace UnitTests.Commands
                 CommandBase.ParseCommandArgs(message)
             );
 
-            Assert.Equal("Message is not a command\nParameter name: message", e.Message);
+            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
             Assert.Equal("message", e.ParamName);
         }
 
@@ -119,7 +119,7 @@ namespace UnitTests.Commands
                 CommandBase.ParseCommandArgs(message)
             );
 
-            Assert.Equal("Message is not a command\nParameter name: message", e.Message);
+            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
             Assert.Equal("message", e.ParamName);
         }
     }

@@ -1,9 +1,9 @@
 ﻿using Moq;
 using System;
-using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using UnitTests.Commands;
 using Xunit;
 
 namespace UnitTests
@@ -24,21 +24,30 @@ namespace UnitTests
             mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
 
             var bot = mockBot.Object;
-            var message = new Message
+            var mockCommand = new MockCommand("test");
+            var mockUpdateContext = new Mock<IUpdateContext>();
+            var update = new Update
             {
-                Text = text,
-                Entities = new[]
+                Message = new Message
                 {
-                    new MessageEntity
+                    Text = text,
+                    Entities = new[]
                     {
-                        Type = MessageEntityType.BotCommand,
-                        Offset = text.IndexOf(commandValue, StringComparison.OrdinalIgnoreCase),
-                        Length = commandValue.Length
-                    },
-                },
+                        new MessageEntity
+                        {
+                            Type = MessageEntityType.BotCommand,
+                            Offset = text.IndexOf(commandValue, StringComparison.OrdinalIgnoreCase),
+                            Length = commandValue.Length
+                        }
+                    }
+                }
             };
 
-            var result = bot.CanHandleCommand("test", message);
+            mockUpdateContext.SetupGet(i => i.Bot).Returns(bot);
+            mockUpdateContext.SetupGet(i => i.Update).Returns(update);
+            
+            var updateContext = mockUpdateContext.Object;
+            var result = mockCommand.CanHandle(updateContext);
 
             Assert.True(result);
         }
@@ -58,12 +67,21 @@ namespace UnitTests
             mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
 
             var bot = mockBot.Object;
-            var message = new Message
+            var mockCommand = new MockCommand("test");
+            var mockUpdateContext = new Mock<IUpdateContext>();
+            var update = new Update
             {
-                Text = text,
+                Message = new Message
+                {
+                    Text = text
+                }
             };
 
-            var result = bot.CanHandleCommand("test", message);
+            mockUpdateContext.SetupGet(i => i.Bot).Returns(bot);
+            mockUpdateContext.SetupGet(i => i.Update).Returns(update);
+            
+            var updateContext = mockUpdateContext.Object;
+            var result = mockCommand.CanHandle(updateContext);
 
             Assert.False(result);
         }
@@ -71,16 +89,20 @@ namespace UnitTests
         [Fact(DisplayName = "Should not accept handling non-text messages")]
         public void Should_Refuse_Handling_Non_Message_Updates()
         {
-            var mockBot = new Mock<IBot>();
-            mockBot.SetupGet(x => x.Username).Returns("Test_Bot");
-
-            var bot = mockBot.Object;
-            var message = new Message
+            var mockCommand = new MockCommand("test");
+            var mockUpdateContext = new Mock<IUpdateContext>();
+            var update = new Update
             {
-                Text = null,
+                Message = new Message
+                {
+                    Text = null
+                }
             };
-
-            var result = bot.CanHandleCommand("test", message);
+            
+            mockUpdateContext.SetupGet(i => i.Update).Returns(update);
+            
+            var updateContext = mockUpdateContext.Object;
+            var result = mockCommand.CanHandle(updateContext);
 
             Assert.False(result);
         }

@@ -5,12 +5,8 @@ namespace Quickstart.AspNetCore.Handlers
 {
     public class TextFilter : UpdateHandlerBase
     {
-        public override bool CanHandle(IUpdateContext context)
-        {
-            var msg = context.Update.Message;
-            return msg.Text.Contains("fuck");
-        }
-        
+        public override bool CanHandle(IUpdateContext context) => When.NewTextMessage(context);
+
         public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
             var msg = context.Update.Message;

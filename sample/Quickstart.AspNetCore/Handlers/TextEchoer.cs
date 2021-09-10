@@ -5,7 +5,7 @@ namespace Quickstart.AspNetCore.Handlers
 {
     public class TextEchoer : UpdateHandlerBase
     {
-        public override bool CanHandle(IUpdateContext context) => When.NewMessage(context);
+        public override bool CanHandle(IUpdateContext context) => When.NewTextMessage(context);
 
         public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {

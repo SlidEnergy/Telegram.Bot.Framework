@@ -17,11 +17,36 @@ namespace Telegram.Bot.Framework.Abstractions
 
         protected CommandBase(string commandName)
         {
+            if (commandName.StartsWith("/"))
+                throw new ArgumentException("Command name must not start with '/'.", nameof(commandName));
+            
             _commandName = commandName;
         }
 
-        public virtual bool CanHandle(IUpdateContext context) =>
-            context.Bot.CanHandleCommand(_commandName, context.Update.Message);
+        public virtual bool CanHandle(IUpdateContext context)
+        {
+            var message = context.Update?.Message;
+            
+            if (message == null)
+                return false;
+            
+            if (string.IsNullOrWhiteSpace(message.Text))
+                return false;
+
+            var isCommand = message.Entities?.FirstOrDefault()?.Type == MessageEntityType.BotCommand;
+            if (!isCommand)
+                return false;
+
+            var isCommandFromGroup = Regex.IsMatch(
+                message.EntityValues.First(),
+                $@"^/{_commandName}(?:@{context.Bot.Username})?$",
+                RegexOptions.IgnoreCase);
+
+            if (!isCommandFromGroup)
+                return false;
+
+            return true;
+        }
 
         protected abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
 
