@@ -94,13 +94,13 @@ namespace Telegram.Bot.Framework.Abstractions
         /// <param name="message">Bot message</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Thrown if parameter <paramref name="message"/> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if message is not command.</exception>
         public static string[] ParseCommandArgs(Message message)
         {
             if (message is null)
                 throw new ArgumentNullException(nameof(message));
+            
             if (message.Entities?.FirstOrDefault()?.Type != MessageEntityType.BotCommand)
-                throw new ArgumentException("Message is not a commandName", nameof(message));
+                return Array.Empty<string>();
 
             var argsList = new List<string>();
             var allArgs = message.Text[message.Entities[0].Length..].TrimStart();

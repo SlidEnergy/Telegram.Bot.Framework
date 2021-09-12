@@ -67,8 +67,8 @@ namespace UnitTests.Commands
             Assert.Equal("message", e.ParamName);
         }
 
-        [Fact(DisplayName = "Should throw exception if the message does not have any entities")]
-        public void Should_Throw_When_No_Message_Entity()
+        [Fact(DisplayName = "Should returns empty array if the message does not have any entities")]
+        public void No_Message_Entity()
         {
             var message = JsonConvert.DeserializeObject<Message>($@"{{
                 message_id: 2,
@@ -77,16 +77,12 @@ namespace UnitTests.Commands
                 date: 1000
             }}");
 
-            var e = Assert.Throws<ArgumentException>(() =>
-                CommandBase.ParseCommandArgs(message)
-            );
-
-            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
-            Assert.Equal("message", e.ParamName);
+            var args = CommandBase.ParseCommandArgs(message);
+            Assert.Equal(ArraySegment<string>.Empty, args);
         }
 
-        [Fact(DisplayName = "Should throw exception if the message entities array is empty")]
-        public void Should_Throw_When_Empty_Message_Entities()
+        [Fact(DisplayName = "Should returns empty array if the message entities array is empty")]
+        public void Empty_Message_Entities()
         {
             var message = JsonConvert.DeserializeObject<Message>($@"{{
                 message_id: 2,
@@ -96,16 +92,12 @@ namespace UnitTests.Commands
                 date: 1000
             }}");
 
-            var e = Assert.Throws<ArgumentException>(() =>
-                CommandBase.ParseCommandArgs(message)
-            );
-
-            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
-            Assert.Equal("message", e.ParamName);
+            var args = CommandBase.ParseCommandArgs(message);
+            Assert.Equal(ArraySegment<string>.Empty, args);
         }
 
-        [Fact(DisplayName = "Should throw exception if the first message entity is not a command")]
-        public void Should_Throw_When_First_Message_Entity_Not_Command()
+        [Fact(DisplayName = "Should returns empty array if the first message entity is not a command")]
+        public void First_Message_Entity_Not_Command()
         {
             var message = JsonConvert.DeserializeObject<Message>($@"{{
                 message_id: 2,
@@ -114,13 +106,9 @@ namespace UnitTests.Commands
                 entities: [ {{ offset: 0, length: 4, type: ""bold"" }} ],
                 date: 1000
             }}");
-
-            var e = Assert.Throws<ArgumentException>(() =>
-                CommandBase.ParseCommandArgs(message)
-            );
-
-            Assert.Equal("Message is not a commandName (Parameter 'message')", e.Message);
-            Assert.Equal("message", e.ParamName);
+            
+            var args = CommandBase.ParseCommandArgs(message);
+            Assert.Equal(ArraySegment<string>.Empty, args);
         }
     }
 }
