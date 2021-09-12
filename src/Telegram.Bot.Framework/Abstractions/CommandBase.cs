@@ -85,9 +85,7 @@ namespace Telegram.Bot.Framework.Abstractions
         /// <param name="next">Next update delegate</param>
         public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
-            return CanHandle(context) ?
-                HandleAsync(context, next, ParseCommandArgs(context.Update.Message))
-                : next(context);
+            return HandleAsync(context, next, ParseCommandArgs(context.Update.Message));
         }
 
         /// <summary>

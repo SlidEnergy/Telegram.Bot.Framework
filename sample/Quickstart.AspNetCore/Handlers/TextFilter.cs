@@ -14,8 +14,6 @@ namespace Quickstart.AspNetCore.Handlers
             await context.Bot.Client.SendTextMessageAsync(
                 msg.Chat, "You said abuse word:\n" + msg.Text
             );
-
-            await next(context);
         }
     }
 }
