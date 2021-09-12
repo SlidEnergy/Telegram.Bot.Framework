@@ -13,7 +13,13 @@ namespace Telegram.Bot.Framework.Abstractions
     /// </summary>
     public abstract class CommandBase : IUpdateHandler
     {
+        #region Fields
+
         private readonly string _commandName;
+
+        #endregion
+        
+        #region Ctor
 
         protected CommandBase(string commandName)
         {
@@ -23,7 +29,31 @@ namespace Telegram.Bot.Framework.Abstractions
             _commandName = commandName;
         }
 
-        public virtual bool CanHandle(IUpdateContext context)
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Command handler method.
+        /// </summary>
+        /// <param name="context">Update context</param>
+        /// <param name="next">Next update delegate</param>
+        /// <param name="args">Command arguments</param>
+        protected abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
+
+        /// <summary>
+        /// Command predicate method.
+        /// </summary>
+        /// <param name="context">Update context</param>
+        /// <returns>True if method can handle.</returns>
+        protected virtual bool CanHandleCommand(IUpdateContext context) => true;
+        
+        /// <summary>
+        /// Determines command can be handled.
+        /// </summary>
+        /// <param name="context">Update context</param>
+        /// <returns>True if command can be handled.</returns>
+        public bool CanHandle(IUpdateContext context)
         {
             var message = context.Update?.Message;
             
@@ -45,11 +75,14 @@ namespace Telegram.Bot.Framework.Abstractions
             if (!isCommandFromGroup)
                 return false;
 
-            return true;
+            return CanHandleCommand(context);
         }
 
-        protected abstract Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args);
-
+        /// <summary>
+        /// Handles command.
+        /// </summary>
+        /// <param name="context">Update context</param>
+        /// <param name="next">Next update delegate</param>
         public Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
             return CanHandle(context) ?
@@ -57,6 +90,13 @@ namespace Telegram.Bot.Framework.Abstractions
                 : next(context);
         }
 
+        /// <summary>
+        /// Parses command arguments from message.
+        /// </summary>
+        /// <param name="message">Bot message</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if parameter <paramref name="message"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if message is not command.</exception>
         public static string[] ParseCommandArgs(Message message)
         {
             if (message is null)
@@ -80,5 +120,7 @@ namespace Telegram.Bot.Framework.Abstractions
 
             return args;
         }
+
+        #endregion
     }
 }
