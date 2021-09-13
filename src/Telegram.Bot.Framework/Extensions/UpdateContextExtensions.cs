@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Framework.Extensions
@@ -10,6 +11,8 @@ namespace Telegram.Bot.Framework.Extensions
     /// </summary>
     public static class UpdateContextExtensions
     {
+        #region Predicate methods
+
         /// <summary>
         /// Determines if update is a webhook or not.
         /// </summary>
@@ -92,5 +95,43 @@ namespace Telegram.Bot.Framework.Extensions
         /// <returns>True if update contains callback query.</returns>
         public static bool IsCallbackQueryUpdate(this IUpdateContext context) =>
             context.Update?.CallbackQuery != null;
+
+        #endregion
+
+        #region Getter methods
+
+        /// <summary>
+        /// Gets message of the update.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
+        /// <returns><see cref="Message"/> entity</returns>
+        public static Message GetMessage(this IUpdateContext context) =>
+            context.IsMessageUpdate() ? context.Update.Message : null;
+        
+        /// <summary>
+        /// Gets text message of the update.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
+        /// <returns>Message text.</returns>
+        public static string GetTextMessage(this IUpdateContext context) =>
+            context.IsTextMessageUpdate() ? context.Update.Message.Text : null;
+        
+        /// <summary>
+        /// Gets reply message of the update.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
+        /// <returns><see cref="Message"/> entity</returns>
+        public static Message GetReplyMessage(this IUpdateContext context) =>
+            context.IsReplyMessageUpdate() ? context.Update.Message.ReplyToMessage : null;
+        
+        /// <summary>
+        /// Gets reply text message of the update.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
+        /// <returns>Message text.</returns>
+        public static string GetReplyTextMessage(this IUpdateContext context) =>
+            context.IsReplyTextMessageUpdate() ? context.Update.Message.ReplyToMessage.Text : null;
+
+        #endregion
     }
 }
