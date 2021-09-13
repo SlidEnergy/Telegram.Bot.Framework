@@ -10,7 +10,7 @@
     <Title>Telegram Bot Framework</Title>
     <Description>Extended verison of telegram bot framework for building powerful Telegram bots 🤖</Description>
     <Authors>Sukhrob Ilyosbekov, Poulad, TelegramBots</Authors>
-	<Version>3.0.6</Version>
+	<Version>3.0.7</Version>
     <PackageTags>telegram;bot;chatbot;chat-framework;framework;netcore</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
