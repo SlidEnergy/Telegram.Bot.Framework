@@ -1,7 +1,7 @@
 ﻿using Quickstart.AspNetCore.Services;
 using System.Threading.Tasks;
+using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
-using Telegram.Bot.Framework.Extensions;
 using Telegram.Bot.Types.Enums;
 
 namespace Quickstart.AspNetCore.Handlers

@@ -4,7 +4,7 @@ using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Framework.Extensions
+namespace Telegram.Bot.Framework
 {
     /// <summary>
     /// Extension methods for <see cref="IUpdateContext"/>
