@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Extensions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
     public class TextFilter : UpdateHandlerBase
     {
-        public override bool CanHandle(IUpdateContext context) => When.NewTextMessage(context);
+        public override bool CanHandle(IUpdateContext context) => context.IsTextMessageUpdate();
 
         public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Extensions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
     public class UpdateMembersList : UpdateHandlerBase
     {
-        public override bool CanHandle(IUpdateContext context) => When.MembersChanged(context);
+        public override bool CanHandle(IUpdateContext context) => context.IsMembersChangedUpdate();
 
         public override Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {

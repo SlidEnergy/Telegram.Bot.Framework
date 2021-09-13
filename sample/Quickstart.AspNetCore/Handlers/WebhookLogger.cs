@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Extensions;
 
 namespace Quickstart.AspNetCore.Handlers
 {
@@ -14,7 +15,7 @@ namespace Quickstart.AspNetCore.Handlers
             _logger = logger;
         }
         
-        public override bool CanHandle(IUpdateContext context) => When.Webhook(context);
+        public override bool CanHandle(IUpdateContext context) => context.IsWebhookUpdate();
 
         public override Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {

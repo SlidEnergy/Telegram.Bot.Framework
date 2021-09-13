@@ -1,6 +1,7 @@
 ﻿using Quickstart.AspNetCore.Services;
 using System.Threading.Tasks;
 using Telegram.Bot.Framework.Abstractions;
+using Telegram.Bot.Framework.Extensions;
 using Telegram.Bot.Types.Enums;
 
 namespace Quickstart.AspNetCore.Handlers
@@ -14,7 +15,7 @@ namespace Quickstart.AspNetCore.Handlers
             _weatherService = weatherService;
         }
 
-        public override bool CanHandle(IUpdateContext context) => When.LocationMessage(context);
+        public override bool CanHandle(IUpdateContext context) => context.IsLocationMessageUpdate();
 
         public override async Task HandleAsync(IUpdateContext context, UpdateDelegate next)
         {
