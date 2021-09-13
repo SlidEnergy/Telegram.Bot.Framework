@@ -104,33 +104,37 @@ namespace Telegram.Bot.Framework
         /// Gets message of the update.
         /// </summary>
         /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
-        /// <returns><see cref="Message"/> entity</returns>
+        /// <returns><see cref="Message"/> entity,
+        /// if update does not have message then returns default value of <see cref="Message"/></returns>
         public static Message GetMessage(this IUpdateContext context) =>
-            context.IsMessageUpdate() ? context.Update.Message : null;
+            context.IsMessageUpdate() ? context.Update.Message : default;
         
         /// <summary>
         /// Gets text message of the update.
         /// </summary>
         /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
-        /// <returns>Message text.</returns>
+        /// <returns>Message text,
+        /// if update does not have text message then returns <see cref="string.Empty"/></returns>
         public static string GetTextMessage(this IUpdateContext context) =>
-            context.IsTextMessageUpdate() ? context.Update.Message.Text : null;
+            context.IsTextMessageUpdate() ? context.Update.Message.Text : string.Empty;
         
         /// <summary>
         /// Gets reply message of the update.
         /// </summary>
         /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
-        /// <returns><see cref="Message"/> entity</returns>
+        /// <returns><see cref="Message"/> entity,
+        /// if update does not have message then returns default value of <see cref="Message"/></returns>
         public static Message GetReplyMessage(this IUpdateContext context) =>
-            context.IsReplyMessageUpdate() ? context.Update.Message.ReplyToMessage : null;
+            context.IsReplyMessageUpdate() ? context.Update.Message.ReplyToMessage : default;
         
         /// <summary>
         /// Gets reply text message of the update.
         /// </summary>
         /// <param name="context">Instance of <see cref="IUpdateContext"/></param>
-        /// <returns>Message text.</returns>
+        /// <returns>Message text,
+        /// if update does not have text message then returns <see cref="string.Empty"/></returns>
         public static string GetReplyTextMessage(this IUpdateContext context) =>
-            context.IsReplyTextMessageUpdate() ? context.Update.Message.ReplyToMessage.Text : null;
+            context.IsReplyTextMessageUpdate() ? context.Update.Message.ReplyToMessage.Text : string.Empty;
 
         #endregion
     }
