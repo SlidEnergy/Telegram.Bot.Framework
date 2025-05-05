@@ -55,8 +55,10 @@ namespace Microsoft.AspNetCore.Builder
             UpdateDelegate updateDelegate) where TBot : IBot
         {
             var options = app.ApplicationServices.GetRequiredService<IOptions<BotOptions>>();
+            var uri = new Uri(options.Value.WebhookPath);
+
             app.Map(
-                options.Value.WebhookPath,
+                uri.AbsolutePath,
                 builder => builder.UseMiddleware<TelegramBotMiddleware<TBot>>(updateDelegate)
             );
 
