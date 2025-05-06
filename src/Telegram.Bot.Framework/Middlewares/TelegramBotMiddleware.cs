@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types;
 
@@ -16,6 +18,7 @@ namespace Telegram.Bot.Framework
         private readonly RequestDelegate _next;
         private readonly UpdateDelegate _updateDelegate;
         private readonly ILogger<TelegramBotMiddleware<TBot>> _logger;
+        private readonly IOptions<JsonOptions> _options;
 
         /// <summary>
         /// Initializes an instance of middleware
@@ -26,12 +29,14 @@ namespace Telegram.Bot.Framework
         public TelegramBotMiddleware(
             RequestDelegate next,
             UpdateDelegate updateDelegate,
-            ILogger<TelegramBotMiddleware<TBot>> logger
+            ILogger<TelegramBotMiddleware<TBot>> logger,
+            IOptions<JsonOptions> options
         )
         {
             _next = next;
             _updateDelegate = updateDelegate;
             _logger = logger;
+            _options = options;
         }
 
         /// <summary>
@@ -59,7 +64,7 @@ namespace Telegram.Bot.Framework
             Update update = null;
             try
             {
-                update = JsonConvert.DeserializeObject<Update>(payload);
+                update = JsonSerializer.Deserialize<Update>(payload, _options.Value.JsonSerializerOptions);
             }
             catch (JsonException e)
             {

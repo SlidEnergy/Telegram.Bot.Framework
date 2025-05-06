@@ -1,9 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 
@@ -82,7 +83,7 @@ namespace Microsoft.AspNetCore.Builder
 
             logger?.LogInformation("Setting webhook for bot \"{Name}\" to URL \"{Url}\"", typeof(TBot).Name, url);
 
-            bot.Client.SetWebhookAsync(url.AbsoluteUri)
+            bot.Client.SetWebhook(url.AbsoluteUri)
                 .GetAwaiter().GetResult();
 
             return app;

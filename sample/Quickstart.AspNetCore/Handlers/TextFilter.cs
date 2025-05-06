@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 
@@ -13,7 +14,7 @@ namespace Quickstart.AspNetCore.Handlers
         {
             var msg = context.Update.Message;
 
-            await context.Bot.Client.SendTextMessageAsync(
+            await context.Bot.Client.SendMessage(
                 msg.Chat, "You said abuse word:\n" + msg.Text
             );
         }

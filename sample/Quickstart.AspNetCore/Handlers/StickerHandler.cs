@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Framework;
 using Telegram.Bot.Framework.Abstractions;
 
@@ -14,7 +15,7 @@ namespace Quickstart.AspNetCore.Handlers
             var msg = context.Update.Message;
             var incomingSticker = msg.Sticker;
 
-            var evilMindsSet = await context.Bot.Client.GetStickerSetAsync("EvilMinds");
+            var evilMindsSet = await context.Bot.Client.GetStickerSet("EvilMinds");
 
             var similarEvilMindSticker = evilMindsSet.Stickers.FirstOrDefault(
                 sticker => incomingSticker.Emoji.Contains(sticker.Emoji)
@@ -22,10 +23,10 @@ namespace Quickstart.AspNetCore.Handlers
 
             var replySticker = similarEvilMindSticker ?? evilMindsSet.Stickers.First();
 
-            await context.Bot.Client.SendStickerAsync(
+            await context.Bot.Client.SendSticker(
                 msg.Chat,
                 replySticker.FileId,
-                replyToMessageId: msg.MessageId
+                replyParameters: new Telegram.Bot.Types.ReplyParameters { MessageId = msg.MessageId }
             );
         }
     }

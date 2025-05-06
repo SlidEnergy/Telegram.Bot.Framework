@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Framework.Abstractions;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -15,11 +16,11 @@ namespace Quickstart.AspNetCore.Handlers
         {
             var msg = context.Update.Message;
 
-            await context.Bot.Client.SendTextMessageAsync(
+            await context.Bot.Client.SendMessage(
                 msg.Chat,
                 "*PONG*",
                 ParseMode.Markdown,
-                replyToMessageId: msg.MessageId,
+                replyParameters: new Telegram.Bot.Types.ReplyParameters() { MessageId = msg.MessageId },
                 replyMarkup: new InlineKeyboardMarkup(
                     InlineKeyboardButton.WithCallbackData("Ping", "PONG")
                 )

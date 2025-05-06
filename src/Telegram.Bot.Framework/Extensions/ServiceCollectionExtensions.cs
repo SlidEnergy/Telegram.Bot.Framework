@@ -19,6 +19,9 @@ namespace Telegram.Bot.Framework
         {
             services.AddTransient(typeof(TBot))
                 .Configure(configureOptions);
+            
+            // or Microsoft.AspNetCore.Http.Json.JsonOptions
+            services.ConfigureTelegramBot<Microsoft.AspNetCore.Mvc.JsonOptions>(opt => opt.JsonSerializerOptions);
 
             return AddHandlersToContainer(services);
         }
@@ -40,6 +43,8 @@ namespace Telegram.Bot.Framework
                     i.ApiToken = options.ApiToken;
                     i.WebhookPath = options.WebhookPath;
                 });
+
+            services.ConfigureTelegramBot<Microsoft.AspNetCore.Mvc.JsonOptions>(opt => opt.JsonSerializerOptions);
 
             return AddHandlersToContainer(services);
         }

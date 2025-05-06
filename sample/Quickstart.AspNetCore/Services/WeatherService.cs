@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Quickstart.AspNetCore.Services
@@ -17,7 +17,7 @@ namespace Quickstart.AspNetCore.Services
             };
         }
 
-        public async Task<CurrentWeather> GetWeatherAsync(float lat, float lon)
+        public async Task<CurrentWeather> GetWeatherAsync(double lat, double lon)
         {
             string location = await FindLocationIdAsync(lat, lon)
                 .ConfigureAwait(false);
@@ -27,7 +27,7 @@ namespace Quickstart.AspNetCore.Services
             string json = await _client.GetStringAsync($"location/{location}/{today.Year}/{today.Month}/{today.Day}")
                 .ConfigureAwait(false);
 
-            dynamic arr = JsonConvert.DeserializeObject(json);
+            dynamic arr = JsonSerializer.Deserialize<dynamic>(json);
 
             return new CurrentWeather
             {
@@ -38,11 +38,11 @@ namespace Quickstart.AspNetCore.Services
             };
         }
 
-        private async Task<string> FindLocationIdAsync(float lat, float lon)
+        private async Task<string> FindLocationIdAsync(double lat, double lon)
         {
             string json = await _client.GetStringAsync($"location/search?lattlong={lat},{lon}")
                 .ConfigureAwait(false);
-            dynamic arr = JsonConvert.DeserializeObject(json);
+            dynamic arr = JsonSerializer.Deserialize<dynamic>(json);
             return arr[0].woeid;
         }
     }

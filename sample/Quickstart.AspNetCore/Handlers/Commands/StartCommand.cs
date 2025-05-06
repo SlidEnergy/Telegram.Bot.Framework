@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Framework.Abstractions;
 
 namespace Quickstart.AspNetCore.Handlers
@@ -11,7 +12,7 @@ namespace Quickstart.AspNetCore.Handlers
         
         protected override async Task HandleAsync(IUpdateContext context, UpdateDelegate next, string[] args)
         {
-            await context.Bot.Client.SendTextMessageAsync(context.Update.Message.Chat, "Hello, World!");
+            await context.Bot.Client.SendMessage(context.Update.Message.Chat, "Hello, World!");
         }
     }
 }
