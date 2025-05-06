@@ -64,7 +64,7 @@ namespace Telegram.Bot.Framework
             Update update = null;
             try
             {
-                update = JsonSerializer.Deserialize<Update>(payload, _options.Value.JsonSerializerOptions);
+                update = JsonSerializer.Deserialize<Update>(payload, JsonBotAPI.Options);
             }
             catch (JsonException e)
             {
